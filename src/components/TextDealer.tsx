@@ -8,9 +8,14 @@ class TextDealer extends React.Component {
     public render() {
         return (
             <div>
-                <TextParser />
+                <TextParser handleWordTree={this.handleWordTree}/>
             </div>
         )
+    }
+
+    private handleWordTree = (e: Response) => {
+        const c = console;
+        c.log(e);
     }
 }
 

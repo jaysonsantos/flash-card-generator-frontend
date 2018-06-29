@@ -1,6 +1,10 @@
 import { Button, TextField } from "@material-ui/core";
 import * as React from 'react';
 
+interface ITextParserProps {
+    handleWordTree(e: Response): void;
+}
+
 interface ITextParserState {
     text: string
 }
@@ -10,11 +14,11 @@ interface IWordTreeRequest {
     pre_processor?: "ttml2";
 }
 
-export default class TextParser extends React.Component<{}, ITextParserState> {
-    constructor(props: any, comp: any) {
+export default class TextParser extends React.Component<ITextParserProps, ITextParserState> {
+    constructor(props: ITextParserProps, comp: ITextParserState) {
         super(props, comp);
         this.state = {
-            text: "Abc"
+            text: "Hallo! Wie geht es dir?"
         };
     }
 
@@ -30,20 +34,15 @@ export default class TextParser extends React.Component<{}, ITextParserState> {
     private handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ text: e.target.value });
     }
-
-    private handleWordTreeResponse = (response: Response) => {
-        const c = console;
-        c.log(response);
-    }
-
     private handleSubmit = (e: any) => {
         const payload: IWordTreeRequest = {
             text: this.state.text,
         };
         const request: RequestInit = {
             body: JSON.stringify(payload),
+            headers: {"content-type": "application/json"},
             method: 'post'
         };
-        fetch("http://localhost:5000/v1/build-word-tree/de", request).then(this.handleWordTreeResponse);
+        fetch("http://localhost:8000/v1/build-word-tree/de", request).then(this.props.handleWordTree);
     }
 }
