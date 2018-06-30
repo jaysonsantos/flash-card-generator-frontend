@@ -1,13 +1,15 @@
-import { CssBaseline, Grid } from '@material-ui/core';
+import { createMuiTheme, CssBaseline, Grid, MuiThemeProvider } from '@material-ui/core';
 import * as React from 'react';
 import './App.css';
+import { Configs } from './components/Configs';
 import TextDealer from './components/TextDealer';
 
+const theme = createMuiTheme();
 
 class App extends React.Component {
   public render() {
     return (
-      <React.Fragment>
+      <MuiThemeProvider theme={theme}>
         <CssBaseline />
         <Grid container={true}>
           {/* <Grid item={true} xs={12}>
@@ -16,10 +18,12 @@ class App extends React.Component {
             </AppBar>
           </Grid> */}
           <Grid item={true} xs={6}>
-            <TextDealer />
+            <Configs>
+              <TextDealer />
+            </Configs>
           </Grid>
         </Grid>
-      </React.Fragment>
+      </MuiThemeProvider>
     );
   }
 }
