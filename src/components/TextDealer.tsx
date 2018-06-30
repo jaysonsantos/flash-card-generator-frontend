@@ -91,20 +91,20 @@ class TextDealer extends React.Component<ITextDealerProps, ITextParserState> {
     private addKnownWord = (word: string) => {
         const oldWords = this.copySet(this.state.knownWords)
         const words = new Set(oldWords);
-        words.push(word);
+        words.add(word);
         this.setState({ knownWords: words });
     }
 
     private addUnknownWord = (word: string) => {
         const oldWords = this.copySet(this.state.unknownWords)
         const words = new Set(oldWords);
-        words.push(word);
+        words.add(word);
         this.setState({ unknownWords: words });
     }
 
     private isWordDecided = (word: string): boolean => {
-        return this.state.knownWords.indexOf(word) >= 0 ||
-            this.state.unknownWords.indexOf(word) >= 0;
+        return this.state.knownWords.has(word) ||
+            this.state.unknownWords.has(word);
     }
 }
 
