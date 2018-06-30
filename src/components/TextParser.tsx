@@ -5,11 +5,9 @@ import { IWordTreeResponse } from "./TextDealer";
 
 interface ITextParserProps {
     configs?: ITextDealerConfig;
+    currentText: string;
     handleWordTree(response: IWordTreeResponse): void;
-}
-
-interface ITextParserState {
-    text: string
+    handleTextChange(currentText: string): void;
 }
 
 interface IWordTreeRequest {
@@ -17,19 +15,12 @@ interface IWordTreeRequest {
     pre_processor?: "ttml2";
 }
 
-export default class TextParser extends React.Component<ITextParserProps, ITextParserState> {
-    constructor(props: ITextParserProps, comp: ITextParserState) {
-        super(props, comp);
-        this.state = {
-            text: "Hallo! Wie geht es dir?"
-        };
-    }
-
+export default class TextParser extends React.Component<ITextParserProps, {}> {
     public render() {
         const hasConfigs = this.props.configs;
         return (
             <div>
-                <TextField multiline={true} value={this.state.text} onChange={this.handleChange} />
+                <TextField multiline={true} value={this.props.currentText} onChange={this.handleChange} />
                 <Button
                     disabled={!hasConfigs}
                     onClick={this.handleSubmit}>
@@ -42,6 +33,7 @@ export default class TextParser extends React.Component<ITextParserProps, ITextP
     private handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const text = e.target.value;
         this.setState({ text });
+        this.props.handleTextChange(text);
     }
 
     private handleSubmit = (_: any) => {
@@ -52,7 +44,7 @@ export default class TextParser extends React.Component<ITextParserProps, ITextP
 
         const url = `${this.props.configs.baseUrl}/v1/build-word-tree/de`;
         const payload: IWordTreeRequest = {
-            text: this.state.text,
+            text: this.props.currentText,
         };
         const request: RequestInit = {
             body: JSON.stringify(payload),

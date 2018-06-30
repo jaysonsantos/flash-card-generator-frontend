@@ -1,13 +1,25 @@
 import { Button } from "@material-ui/core";
 import * as React from "react";
-import { ITextParserState } from "./TextDealer";
+import { ITextDealerProps, ITextParserState } from "./TextDealer";
 
 
 interface ICardGeneratorState {
-    generatedCard: string;
+    generatedCard?: string;
 }
 
-class CardGenerator extends React.Component<ITextParserState, ICardGeneratorState> {
+interface ICardGeneratorProps extends ITextParserState, ITextDealerProps { };
+
+interface IGenerateCardRequest {
+    text: string,
+    known_words: string[],
+    unkown_words: string[];
+}
+
+class CardGenerator extends React.Component<ICardGeneratorProps, ICardGeneratorState> {
+    constructor(props: ICardGeneratorProps, state: ICardGeneratorState) {
+        super(props, state);
+        this.state = {}
+    }
     public render() {
         return (
             <React.Fragment>
@@ -20,7 +32,23 @@ class CardGenerator extends React.Component<ITextParserState, ICardGeneratorStat
     }
 
     private generateCard = (_: any) => {
+        if (!this.props.configs) {
+            return;
+        }
         const url = `${this.props.configs.baseUrl}/v1/generate-flash-card/de`;
+        const payload: IGenerateCardRequest = {
+            known_words: this.props.knownWords,
+            text: this.props.currentText,
+            unkown_words: this.props.unknownWords,
+        };
+        const request: RequestInit = {
+            body: JSON.stringify(payload),
+            headers: { "content-type": "application/json" },
+            method: 'post',
+        }
+        fetch(url, request).
+            then((response: Response) => response.json())
+            .then((data: any) => { const c = console; c.log(data) });
     }
 }
 

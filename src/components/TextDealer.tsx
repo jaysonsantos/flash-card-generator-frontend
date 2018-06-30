@@ -1,10 +1,11 @@
 import * as _ from 'lodash';
 import * as React from 'react';
+import CardGenerator from './CardGenerator';
 import { ITextDealerConfig } from './Configs';
 import TextParser from './TextParser';
 import Word from './Word';
 
-interface ITextDealerProps {
+export interface ITextDealerProps {
     configs?: ITextDealerConfig;
 }
 
@@ -15,8 +16,9 @@ export interface IWordTreeResponse {
 }
 
 export interface ITextParserState {
-    knownWords: string[]; // Use a set to be faster?
-    unknownWords: string[]; // Use a set to be faster?
+    knownWords: Set<string>;
+    unknownWords: Set<string>;
+    currentText: string;
     wordTree: WordTreeType;
 }
 
@@ -24,8 +26,9 @@ class TextDealer extends React.Component<ITextDealerProps, ITextParserState> {
     constructor(props: ITextDealerProps, state: ITextParserState) {
         super(props, state);
         this.state = {
-            knownWords: [],
-            unknownWords: [],
+            currentText: "Hallo! Wie geht es dir?",
+            knownWords: new Set([]),
+            unknownWords: new Set([]),
             wordTree: new Map(),
         }
     }
@@ -50,11 +53,22 @@ class TextDealer extends React.Component<ITextDealerProps, ITextParserState> {
         return (
             <>
                 <TextParser
+                    currentText={this.state.currentText}
                     handleWordTree={this.handleWordTree}
+                    handleTextChange={this.handleTextChange}
                     configs={this.props.configs} />
                 {wordTree}
+                <CardGenerator unknownWords={this.state.unknownWords}
+                    knownWords={this.state.knownWords}
+                    currentText={this.state.currentText}
+                    wordTree={this.state.wordTree}
+                    configs={this.props.configs} />
             </>
         )
+    }
+
+    private handleTextChange = (currentText: string) => {
+        this.setState({ currentText });
     }
 
     private handleWordTree = (response: IWordTreeResponse) => {
@@ -66,14 +80,24 @@ class TextDealer extends React.Component<ITextDealerProps, ITextParserState> {
         this.setState({ wordTree });
     }
 
+    private copySet<T>(set: Set<T>): T[] {
+        const output: T[] = new Array();
+        for (const key of set.keys()) {
+            output.push(key)
+        }
+        return output;
+    }
+
     private addKnownWord = (word: string) => {
-        const words = this.state.knownWords.slice();
+        const oldWords = this.copySet(this.state.knownWords)
+        const words = new Set(oldWords);
         words.push(word);
         this.setState({ knownWords: words });
     }
 
     private addUnknownWord = (word: string) => {
-        const words = this.state.unknownWords.slice();
+        const oldWords = this.copySet(this.state.unknownWords)
+        const words = new Set(oldWords);
         words.push(word);
         this.setState({ unknownWords: words });
     }
