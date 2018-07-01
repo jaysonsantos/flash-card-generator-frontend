@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import * as React from 'react';
+import * as wu from "wu";
 import CardGenerator from './CardGenerator';
 import { ITextDealerConfig } from './Configs';
 import TextParser from './TextParser';
@@ -17,9 +18,7 @@ export interface IWordTreeResponse {
 
 export interface ITextParserState {
     knownWords: Set<string>;
-    knownWordsLength: number;
     unknownWords: Set<string>;
-    unknownWordsLength: number;
     currentText: string;
     wordTree: WordTreeType;
 }
@@ -30,30 +29,20 @@ class TextDealer extends React.Component<ITextDealerProps, ITextParserState> {
         this.state = {
             currentText: "Hallo! Wie geht es dir?",
             knownWords: new Set([]),
-            knownWordsLength: 0,
             unknownWords: new Set([]),
-            unknownWordsLength: 0,
             wordTree: new Map(),
         }
     }
 
     public render() {
-        const wordTree: Array<React.ReactElement<any>> = [];
         let i = 0;
-        this.state.wordTree.forEach((examples, word) => {
-            if (this.isWordDecided(word)) {
-                return;
-            }
-            wordTree.push(<Word
+        const wordTree = wu(this.state.wordTree.entries()).
+            filter(([word, __]) => !this.isWordDecided(word)).
+            map(([word, examples]) => <Word
                 key={i++} word={word} examples={examples}
                 addKnownWord={this.addKnownWord}
                 addUnknownWord={this.addUnknownWord} />);
-        });
-        // const reduceWord = (words: Array<React.ReactElement<any>>, word: string, examples: string[]) => {
-        //     words.push(<Word key={words.length} word={word} examples={examples} />);
-        //     return words;
-        // };
-        // const wordTree = _.reduce(this.state.wordTree, reduceWord, new Array());
+                
         return (
             <>
                 <TextParser
@@ -64,9 +53,7 @@ class TextDealer extends React.Component<ITextDealerProps, ITextParserState> {
                 {wordTree}
                 <CardGenerator
                     unknownWords={this.state.unknownWords}
-                    unknownWordsLength={this.state.unknownWordsLength}
                     knownWords={this.state.knownWords}
-                    knownWordsLength={this.state.knownWordsLength}
                     currentText={this.state.currentText}
                     wordTree={this.state.wordTree}
                     configs={this.props.configs} />
@@ -87,26 +74,14 @@ class TextDealer extends React.Component<ITextDealerProps, ITextParserState> {
         this.setState({ wordTree });
     }
 
-    private copySet<T>(set: Set<T>): T[] {
-        const output: T[] = new Array();
-        for (const key of set.keys()) {
-            output.push(key)
-        }
-        return output;
-    }
-
     private addKnownWord = (word: string) => {
-        const oldWords = this.copySet(this.state.knownWords)
-        const words = new Set(oldWords);
-        words.add(word);
-        this.setState({ knownWords: words, knownWordsLength: this.state.knownWordsLength + 1 });
+        const newWords = [word, ...this.state.knownWords];
+        this.setState({ knownWords: new Set(newWords) });
     }
 
     private addUnknownWord = (word: string) => {
-        const oldWords = this.copySet(this.state.unknownWords)
-        const words = new Set(oldWords);
-        words.add(word);
-        this.setState({ unknownWords: words, unknownWordsLength: this.state.unknownWordsLength + 1 });
+        const newWords = [word, ...this.state.unknownWords];
+        this.setState({ unknownWords: new Set(newWords) });
     }
 
     private isWordDecided = (word: string): boolean => {

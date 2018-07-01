@@ -27,8 +27,8 @@ class CardGenerator extends React.Component<ICardGeneratorProps, ICardGeneratorS
     public render() {
         return (
             <React.Fragment>
-                Known words: {this.props.knownWordsLength}
-                Unknown words: {this.props.unknownWordsLength}
+                Known words: {this.props.knownWords.size}<br />
+                Unknown words: {this.props.unknownWords.size}
                 <Button onClick={this.generateCard}>Generate card</Button>
                 <div hidden={!this.state.generatedCard}>{this.state.generatedCard}></div>
             </React.Fragment>
