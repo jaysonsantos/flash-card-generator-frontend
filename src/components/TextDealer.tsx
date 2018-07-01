@@ -17,7 +17,9 @@ export interface IWordTreeResponse {
 
 export interface ITextParserState {
     knownWords: Set<string>;
+    knownWordsLength: number;
     unknownWords: Set<string>;
+    unknownWordsLength: number;
     currentText: string;
     wordTree: WordTreeType;
 }
@@ -28,7 +30,9 @@ class TextDealer extends React.Component<ITextDealerProps, ITextParserState> {
         this.state = {
             currentText: "Hallo! Wie geht es dir?",
             knownWords: new Set([]),
+            knownWordsLength: 0,
             unknownWords: new Set([]),
+            unknownWordsLength: 0,
             wordTree: new Map(),
         }
     }
@@ -58,8 +62,11 @@ class TextDealer extends React.Component<ITextDealerProps, ITextParserState> {
                     handleTextChange={this.handleTextChange}
                     configs={this.props.configs} />
                 {wordTree}
-                <CardGenerator unknownWords={this.state.unknownWords}
+                <CardGenerator
+                    unknownWords={this.state.unknownWords}
+                    unknownWordsLength={this.state.unknownWordsLength}
                     knownWords={this.state.knownWords}
+                    knownWordsLength={this.state.knownWordsLength}
                     currentText={this.state.currentText}
                     wordTree={this.state.wordTree}
                     configs={this.props.configs} />
@@ -92,14 +99,14 @@ class TextDealer extends React.Component<ITextDealerProps, ITextParserState> {
         const oldWords = this.copySet(this.state.knownWords)
         const words = new Set(oldWords);
         words.add(word);
-        this.setState({ knownWords: words });
+        this.setState({ knownWords: words, knownWordsLength: this.state.knownWordsLength + 1 });
     }
 
     private addUnknownWord = (word: string) => {
         const oldWords = this.copySet(this.state.unknownWords)
         const words = new Set(oldWords);
         words.add(word);
-        this.setState({ unknownWords: words });
+        this.setState({ unknownWords: words, unknownWordsLength: this.state.unknownWordsLength + 1 });
     }
 
     private isWordDecided = (word: string): boolean => {
