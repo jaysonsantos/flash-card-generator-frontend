@@ -32,7 +32,6 @@ export default class TextParser extends React.Component<ITextParserProps, {}> {
 
     private handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const text = e.target.value;
-        this.setState({ text });
         this.props.handleTextChange(text);
     }
 
@@ -51,8 +50,10 @@ export default class TextParser extends React.Component<ITextParserProps, {}> {
             headers: { "content-type": "application/json" },
             method: 'post'
         };
+
         fetch(url, request).
             then((response: Response) => response.json()).
-            then(this.props.handleWordTree);
+            then(this.props.handleWordTree).
+            catch(console.log);
     }
 }

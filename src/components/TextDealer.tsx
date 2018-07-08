@@ -54,14 +54,16 @@ class TextDealer extends React.Component<ITextDealerProps, ITextParserState> {
         )
     }
 
-    private renderWordTree = () => {
+    private renderWordTree = (): Array<React.ReactElement<any>> => {
         let i = 0;
-        return wu(this.state.wordTree.entries()).
+        const tree = wu(this.state.wordTree.entries()).
             filter(([word, __]) => !this.isWordDecided(word)).
             map(([word, examples]) => <Word
                 key={i++} word={word} examples={examples}
                 addKnownWord={this.addKnownWord}
                 addUnknownWord={this.addUnknownWord} />);
+
+        return [...tree];
     }
 
     private handleTextChange = (currentText: string) => {
