@@ -1,5 +1,6 @@
 import { Button } from "@material-ui/core";
 import * as React from "react";
+import FlashCardRenderer from "./FlashCardRenderer";
 import { ITextDealerProps, ITextParserState } from "./TextDealer";
 
 
@@ -22,8 +23,11 @@ interface IGenerateCardResponse {
 class CardGenerator extends React.Component<ICardGeneratorProps, ICardGeneratorState> {
     constructor(props: ICardGeneratorProps, state: ICardGeneratorState) {
         super(props, state);
-        this.state = {}
+        this.state = {
+            generatedCard: "gehen<br />Wie geht es dir?\tgo<br />How are you?\nhallo<br />Hallo!\tHello<br />Hello!\nich<br />Wie geht es dir?\tI<br />How are you?\ns<br />s\ts<br />s\nsich<br />Wie geht es dir?\tthemselves<br />How are you?\nwie<br />Wie geht es dir?\tas<br />How are you?\n"
+        }
     }
+
     public render() {
         return (
             <React.Fragment>
@@ -31,10 +35,10 @@ class CardGenerator extends React.Component<ICardGeneratorProps, ICardGeneratorS
                 Unknown words: {this.props.unknownWords.size}
                 <Button
                     onClick={this.generateCard}
-                    disabled={!this.props.unknownWords.size}>
+                    disabled={!this.canGenerateCard}>
                     Generate card
                 </Button>
-                <div hidden={!this.state.generatedCard}>{this.state.generatedCard}></div>
+                <div hidden={!this.state.generatedCard}>{this.renderFlashCard()}</div>
             </React.Fragment>
         );
     }
@@ -57,6 +61,19 @@ class CardGenerator extends React.Component<ICardGeneratorProps, ICardGeneratorS
         fetch(url, request).
             then((response: Response) => response.json())
             .then((data: IGenerateCardResponse) => { this.setState({ generatedCard: data.text }) });
+    }
+
+    private get canGenerateCard(): boolean {
+        return this.props.unknownWords.size > 0 &&
+            this.props.currentText.replace(/\W/g, '') !== "";
+    }
+
+    private renderFlashCard = () => {
+        if (this.state.generatedCard) {
+            return <FlashCardRenderer generatedText={this.state.generatedCard} />;
+        }
+
+        return <></>;
     }
 }
 

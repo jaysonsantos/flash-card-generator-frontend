@@ -1,4 +1,4 @@
-import { Button, Card, Typography } from "@material-ui/core";
+import { Button, Card, CardContent, Typography } from "@material-ui/core";
 import * as React from "react";
 
 interface IWordProps {
@@ -12,18 +12,20 @@ class Word extends React.Component<IWordProps, {}> {
     public render() {
         return (
             <Card>
-                <Typography color="textSecondary">
-                    Do you know this word?
+                <CardContent>
+                    <Typography color="textSecondary">
+                        Do you know this word?
                 </Typography>
-                <Typography variant="headline" component="h2">
-                    {this.props.word}
+                    <Typography variant="headline" component="h2">
+                        {this.props.word}
+                    </Typography>
+                    <Typography component="p">
+                        Examples
                 </Typography>
-                <Typography component="p">
-                    Examples
-                </Typography>
-                {this.renderExamples(this.props.examples)}
-                <Button size="small" variant="contained" color="primary" onClick={this.addKnownWord}>Yes</Button>
-                <Button size="small" variant="contained" color="secondary" onClick={this.addUnknownWord}>No</Button>
+                    {this.renderExamples(this.props.examples)}
+                    <Button size="small" variant="contained" color="primary" onClick={this.addKnownWord}>Yes</Button>
+                    <Button size="small" variant="contained" color="secondary" onClick={this.addUnknownWord}>No</Button>
+                </CardContent>
             </Card>
         );
     }
