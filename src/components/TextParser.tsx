@@ -23,6 +23,8 @@ export default class TextParser extends React.Component<ITextParserProps, {}> {
                 <TextField multiline={true} value={this.props.currentText} onChange={this.handleChange} />
                 <Button
                     disabled={!hasConfigs}
+                    variant="contained"
+                    color="primary"
                     onClick={this.handleSubmit}>
                     {hasConfigs ? "Parse text" : "Loading configs"}
                 </Button>

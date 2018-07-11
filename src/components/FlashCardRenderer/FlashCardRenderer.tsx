@@ -57,7 +57,7 @@ export default class FlashCardRenderer extends React.Component<IFlashCardRendere
                         {[...phrases]}
                     </Typography>
                     <CardActions>
-                        <Button size="small">Flip</Button>
+                        <Button size="small" variant="contained" color="primary">Flip</Button>
                     </CardActions>
                 </CardContent>
             </Card>
