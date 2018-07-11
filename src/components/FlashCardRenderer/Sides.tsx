@@ -1,37 +1,49 @@
-import { Button, Card, CardActions, CardContent, Typography } from "@material-ui/core";
 import * as React from "react";
 import * as wu from "wu";
+import Side from "./Side";
 
-
-interface ISideProps {
-    text: string;
+interface ISidesProps {
+    word: string;
+    line: string;
 }
 
-export default class Side extends React.Component<ISideProps, {}> {
+interface ISidesState {
+    activeSide: number
+}
+
+export default class Sides extends React.Component<ISidesProps, ISidesState> {
+    private sidesConfigs = {
+        0: { opposite: 1, color: "primary", buttonName: "Show back card" },
+        1: { opposite: 0, color: "secondary", buttonName: "Show front card" },
+    }
+    public constructor(props: ISidesProps, state: ISidesState) {
+        super(props, state);
+        this.state = {
+            activeSide: 0
+        }
+    }
     public render(): React.ReactElement<any> {
-        const data = this.props.text.split('<br />');
-        const phrases = wu(data.slice(1).entries()).map(this.formatPhrases);
-        const word = data[0];
+        const s = wu(this.props.line.split('\t').entries()).map(([i, text]) => {
+            const configs = this.sidesConfigs[i];
+            return <Side
+                key={i} text={text} active={this.state.activeSide === i}
+                toggleActiveSide={this.toggleActiveSide}
+                color={configs.color} buttonName={configs.buttonName} />;
+        });
+        const sides = [...s];
+
+        if (sides.length !== 2) {
+            throw new Error(`Line didn't have two sides flash card`);
+        }
 
         return (
-            <Card key={word}>
-                <CardContent>
-                    <Typography variant="headline" component="h2">
-                        {word}
-                    </Typography>
-                    <Typography variant="subheading">Examples</Typography>
-                    <Typography variant="body1">
-                        {[...phrases]}
-                    </Typography>
-                    <CardActions>
-                        <Button size="small" variant="contained" color="primary">Flip</Button>
-                    </CardActions>
-                </CardContent>
-            </Card>
+            <div key={this.props.word}>
+                {sides}
+            </div>
         );
     }
 
-    private formatPhrases([i, phrase]: [number, string]): React.ReactElement<any> {
-        return <div key={i}>{phrase}</div>;
+    private toggleActiveSide = () => {
+        this.setState({ activeSide: this.sidesConfigs[this.state.activeSide].opposite });
     }
 }
