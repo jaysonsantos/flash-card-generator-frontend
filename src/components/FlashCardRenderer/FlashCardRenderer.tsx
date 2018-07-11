@@ -27,7 +27,7 @@ export default class FlashCardRenderer extends React.Component<IFlashCardRendere
     private renderFlashCardSides = (line: string): React.ReactElement<any> => {
         const s = wu(line.split('\t').entries()).map(([i, text]) => <Side key={i} text={text} />);
         const sides = [...s];
-        const match = line.match(/.[^<]*/);
+        const match = line.match(this.regex);
         if (!match) {
             throw new Error(`Line didn't have proper tags "${line}"`);
         }
