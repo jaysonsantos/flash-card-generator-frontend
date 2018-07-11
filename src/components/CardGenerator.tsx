@@ -24,7 +24,7 @@ class CardGenerator extends React.Component<ICardGeneratorProps, ICardGeneratorS
     constructor(props: ICardGeneratorProps, state: ICardGeneratorState) {
         super(props, state);
         this.state = {
-            generatedCard: "gehen<br />Wie geht es dir?\tgo<br />How are you?\nhallo<br />Hallo!\tHello<br />Hello!\nich<br />Wie geht es dir?\tI<br />How are you?\ns<br />s\ts<br />s\nsich<br />Wie geht es dir?\tthemselves<br />How are you?\nwie<br />Wie geht es dir?\tas<br />How are you?\n"
+            generatedCard: "gehen<br />Wie geht es dir?<br />Es geht mir gut und dir?\tgo<br />How are you?<br />I'm fine and you?\n"
         }
     }
 

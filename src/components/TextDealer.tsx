@@ -27,7 +27,7 @@ class TextDealer extends React.Component<ITextDealerProps, ITextParserState> {
     constructor(props: ITextDealerProps, state: ITextParserState) {
         super(props, state);
         this.state = {
-            currentText: "Hallo! Wie geht es dir?",
+            currentText: "Hallo! Wie geht es dir? Es geht mir gut und dir?",
             knownWords: new Set([]),
             unknownWords: new Set([]),
             wordTree: new Map(),
