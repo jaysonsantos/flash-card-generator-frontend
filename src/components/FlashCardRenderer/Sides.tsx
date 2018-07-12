@@ -1,3 +1,4 @@
+import { Collapse } from "@material-ui/core";
 import * as React from "react";
 import * as wu from "wu";
 import Side from "./Side";
@@ -25,10 +26,11 @@ export default class Sides extends React.Component<ISidesProps, ISidesState> {
     public render(): React.ReactElement<any> {
         const s = wu(this.props.line.split('\t').entries()).map(([i, text]) => {
             const configs = this.sidesConfigs[i];
-            return <Side
-                key={i} text={text} active={this.state.activeSide === i}
+            const active = this.state.activeSide === i;
+            return <Collapse key={i} in={active}><Side
+                text={text} active={active}
                 toggleActiveSide={this.toggleActiveSide}
-                color={configs.color} buttonName={configs.buttonName} />;
+                color={configs.color} buttonName={configs.buttonName} /></Collapse>;
         });
         const sides = [...s];
 

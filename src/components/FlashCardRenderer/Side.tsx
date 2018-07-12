@@ -18,7 +18,7 @@ export default class Side extends React.Component<ISideProps, {}> {
         const word = data[0];
 
         return (
-            <Card key={word} hidden={!this.props.active}>
+            <Card key={word}>
                 <CardContent>
                     <Typography variant="headline" component="h2">
                         {word}
