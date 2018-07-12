@@ -1,4 +1,4 @@
-import { Button } from "@material-ui/core";
+import { Button, Fade } from "@material-ui/core";
 import * as React from "react";
 import FlashCardRenderer from "./FlashCardRenderer";
 import { ITextDealerProps, ITextParserState } from "./TextDealer";
@@ -30,16 +30,18 @@ class CardGenerator extends React.Component<ICardGeneratorProps, ICardGeneratorS
 
     public render() {
         return (
-            <React.Fragment>
-                Known words: {this.props.knownWords.size}<br />
-                Unknown words: {this.props.unknownWords.size}
-                <Button
-                    onClick={this.generateCard}
-                    disabled={!this.canGenerateCard}>
-                    Generate card
+            <Fade in={this.props.unknownWords.size > 0}>
+                <div>
+                    Known words: {this.props.knownWords.size}<br />
+                    Unknown words: {this.props.unknownWords.size}
+                    <Button
+                        onClick={this.generateCard}
+                        disabled={!this.canGenerateCard}>
+                        Generate card
                 </Button>
-                <div hidden={!this.state.generatedCard}>{this.renderFlashCard()}</div>
-            </React.Fragment>
+                    <div hidden={!this.state.generatedCard}>{this.renderFlashCard()}</div>
+                </div>
+            </Fade>
         );
     }
 

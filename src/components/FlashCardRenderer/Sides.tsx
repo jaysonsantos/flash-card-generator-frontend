@@ -12,11 +12,16 @@ interface ISidesState {
     activeSide: number
 }
 
+export enum SideEnum {
+    Front = 0,
+    Back = 1
+}
+
 export default class Sides extends React.Component<ISidesProps, ISidesState> {
     private sidesConfigs = {
-        0: { opposite: 1, color: "primary", buttonName: "Show back card" },
-        1: { opposite: 0, color: "secondary", buttonName: "Show front card" },
-    }
+        [SideEnum.Front]: { opposite: SideEnum.Back, color: "primary", buttonName: "Show back card" },
+        [SideEnum.Back]: { opposite: SideEnum.Front, color: "secondary", buttonName: "Show front card" },
+    };
     public constructor(props: ISidesProps, state: ISidesState) {
         super(props, state);
         this.state = {
