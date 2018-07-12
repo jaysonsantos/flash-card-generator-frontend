@@ -38,7 +38,7 @@ class CardGenerator extends React.Component<ICardGeneratorProps, ICardGeneratorS
                         onClick={this.generateCard}
                         disabled={!this.canGenerateCard}>
                         Generate card
-                </Button>
+                    </Button>
                     <div hidden={!this.state.generatedCard}>{this.renderFlashCard()}</div>
                 </div>
             </Fade>
