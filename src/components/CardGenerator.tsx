@@ -30,18 +30,19 @@ class CardGenerator extends React.Component<ICardGeneratorProps, ICardGeneratorS
 
     public render() {
         return (
-            <Fade in={this.props.unknownWords.size > 0}>
-                <div>
-                    Known words: {this.props.knownWords.size}<br />
-                    Unknown words: {this.props.unknownWords.size}
+            <>
+                Known words: {this.props.knownWords.size}<br />
+                Unknown words: {this.props.unknownWords.size}
+                <Fade in={this.canGenerateCard}>
                     <Button
-                        onClick={this.generateCard}
-                        disabled={!this.canGenerateCard}>
+                        onClick={this.generateCard}>
                         Generate card
                     </Button>
-                    <div hidden={!this.state.generatedCard}>{this.renderFlashCard()}</div>
-                </div>
-            </Fade>
+                </Fade>
+                <Fade in={!!this.state.generatedCard}>
+                    {this.renderFlashCard()}
+                </Fade>
+            </>
         );
     }
 
